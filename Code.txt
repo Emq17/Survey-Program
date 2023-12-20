@@ -1,0 +1,143 @@
+import java.utilScanner; // Imports the Scanner class from Java’s built-in utilities
+
+import java.io.File; // Imports the file class from Java’s built-in utilities
+
+import java.io.FileNotFoundException; /* Imports the FileNotFoundException class from Java’s built-in utilities */
+
+public class SurveyProgram { // Declaring a public class named SurveyProgram
+
+	public static void main (String[] args) { // Declaring the main method for the class
+
+		Scanner input = new Scanner(System.in); /* Creating a Scanner object named “input” to read the users input from the 
+		console */ 
+
+		String[] parties = {“Democrat”, “Republican”, “Libertarian”, “Green”};
+		// Initializing a String array named “parties” with political party names
+
+		int[] responses = new int [parties.length][]; /* Initializing a 2D int array named 
+		“responses” to store the users response for each political party */
+
+		String[] questions =  {“What is your stance on abortion?”, /* Initializing a String array named “questions” with survey 
+		questions */
+
+			“What is your stance on gun control?”,
+			“What is your stance on taxes?”,
+			“What is your stance on climate change?”,
+			“What is your stance on healthcare?”,
+			“What is your stance on immigration?”,
+			“What is your stance on education?”,
+			“What is your stance on foreign policy?”,
+			“What is your stance on same-sex marriage?”};
+
+		String[] answers = {“Strongly disagree”, “Disagree”, “Neutral”, “Agree”, 	
+		“Strongly agree”}; /* Initializing a String array named “answers” with survey answer options */
+
+		for (int i = 0, i < parties.length; i++) { // Iterating over political party names
+
+			try { // Starting try block to catch FileNotFoundException
+
+				Scanner file = new Scanner (new File(parties[i] + “.txt”)); /* Creating a Scanner object named “file” 
+				to read from a file named after the current political party */
+
+				responses[i] = new int[questions.length * answers.length]; /* Initializing a 1D int array within the 
+				“responses” array to store responses for each question and answer combination */
+
+				while (file.hasNextLine()) { // Starting a loop to read each line of the file
+
+					String line = file.nextLine(); // Reading the current line of the file
+
+					String[] values = line.split(“,”); /* Splitting the line into an array of values separated by 
+					commas */
+
+					for (int j = 0; j < values.length; j++) { // Iterating over the values in the current line
+
+						responses[i][j] += Integer.parseInt(values[j]); /* Adding the value to the 
+						corresponding index in the “responses” array */
+	}
+}
+// Catching a FileNotFoundException if the file doesn’t exist
+} catch (FileNotFoundException e) { 
+
+// Printing an error message
+System.out.println(“Error: “ + parties[i] + “.txt file not found”);
+	}
+}
+
+// Printing a welcome message
+System.out.println(“Welcome to the AI Survey Program”);
+
+// Create an array to store the user’s responses
+int[] userResponses = new int[questions.length];
+
+// Loop through each question
+for (int i = 0; i < questions.length; i++) {
+
+// Display the question
+System.out.println(questions[i]);
+
+// Loop through each possible answer and display it
+For (int j = 0; j < answers.length; j++) {
+
+	System.out.println((j+1) + “.” + answers[j]);
+}
+
+// Get the user’s response and make sure it is valid
+int userAnswer = input.nextInt();
+
+while (userAnswer < 1 || userAnswer > 5) {
+
+	System.out.println(“Please enter a valid answer (1-5):”);
+
+	userAnswer = input.nextInt();
+}
+
+// Store the user’s answer in the array, scaled to a range of –2 to +2
+userResponses[i] = userAnswer - 3;
+}
+
+// Initialize variables to keep track of the party with the highest score
+int maxPartyIndex = 0;
+
+double maxPartyScore = -Double.MAX_VALUE;
+
+// Loop through each party
+for (int i = 0, i < parties.length; i++) {
+
+// Initialize a score for this party 
+double partyScore = 1.0;
+
+// Loop through each user response and calculate the probabilities of the response given the party’s position
+for (int j = 0; j < userResponses.length; j++) {
+
+	int index = (j * answers.length) + (userResponses[j] + 2);
+
+	double probability = (double) responses[i][index] / sum(responses[i], j * answers.length, (j+1) * answers.length);
+
+	partyScore *= probability;
+}
+
+// If this party has a higher score than any previous party, update the max score and index
+if (partyScore > maxPartyScore) {
+
+	maxPartyScore = partyScore;
+
+	maxPartyIndex = i; 
+
+	}
+}
+
+// Display the party with the highest score as the user’s most likely match 
+System.out.println(“Based on your responses, you are most likely a “ + parties[maxPartyIndex] + “.”);
+
+// A helper function to calculate the sum of an array between two indices
+public static int sum(int[] array, int startIndex, int endIndex) { 
+
+	int sum = 0;
+
+	for (int i = startIndex; i < endIndex; i++) { 
+
+		sum += array[i];
+	}
+
+	return sum;
+}
