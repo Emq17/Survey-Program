@@ -2,7 +2,7 @@
 <img src="https://i.imgur.com/6ZmfaJH.png" alt="Logo"/>
 </p>
 
-<h1 align="center">Survey Program</h1>
+<h1 align="center">Political Survey Program</h1>
 
 
 - The code is a Java program that asks users a series of questions about their political beliefs and uses Bayes’ Theorem to guess their political party based on their responses.
